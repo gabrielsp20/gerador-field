@@ -4,6 +4,12 @@ Aplicação web criada para auxiliar profissionais de Suporte de TI na elaboraç
 
 O sistema permite preencher os dados do chamado, gerar um texto padronizado, copiar o conteúdo, salvar rascunhos e manter um histórico de encaminhamentos no navegador.
 
+## Projeto online
+
+Acesse a aplicação:
+
+https://gabrielsp20.github.io/gerador-field/
+
 ## Funcionalidades
 
 - Geração automática do texto de encaminhamento
