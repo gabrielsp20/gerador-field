@@ -1,0 +1,271 @@
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f1e8;
+    color: #1f2933;
+    min-height: 100vh;
+}
+
+.container{
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 16px;
+}
+
+.hero{
+    margin-bottom: 32px;
+}
+
+.tag{
+    display: inline-block;
+    background: #1f2933;
+    color: #d4af37;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.hero h1{
+    font-size: 36px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+.descricao{
+    font-size: 18px;
+    line-height: 1.6;
+    color: #4b5563;
+}
+
+.card{
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.card h2{
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+.campo{
+    margin-bottom: 18px;
+}
+
+.campo label{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #1f2933;
+}
+
+.campo textarea {
+  resize: vertical; 
+}
+
+.campo input,
+.campo textarea,
+.campo select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: inherit;
+    color:#111827;
+    background: #ffffff;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #1f2933;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background: #111827;
+}
+
+button:focus-visible {
+  outline: 3px solid rgba(212, 175, 55, 0.5);
+  outline-offset: 3px; 
+}
+
+#textoGerado {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  resize: vertical;
+  margin-bottom: 16px;
+  background: #f9fafb;
+  color: #111827;
+}
+
+.mensagem {
+    min-height: 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.mensagem.erro{
+    color:#b91c1c;
+}
+
+.mensagem.sucesso {
+    color: #166534;
+}
+
+.botao-secundario {
+    margin-top: 12px;
+    background: #ffffff;
+    color: #1f2933;
+    border: 1px solid #d1d5db;
+}
+
+.botao-secundario:hover{
+    background: #f3f4f6;
+}
+
+.botao-perigo {
+    margin-top: 12px;
+    background: #ffffff;
+    color: #b91c1c;
+    border: 1px solid #b91c1c;
+}
+
+.botao-perigo:hover{
+    background: #fef2f2;
+}
+
+.historico-vazio {
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.lista-historico {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.item-historico {
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f9fafb;
+}
+
+.item-historico strong {
+  display: block; 
+  margin-bottom: 6px; 
+  color: #111827; 
+}
+
+.item-historico span {
+  color: #6b7280; 
+  font-size: 14px;
+}
+
+.botao-historico{
+    width: auto;
+    margin-top: 12px;
+    padding:  8px 12px;
+    background: #ffffff;
+    color: #1f2933;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+.botao-historico:hover{
+    background: #f3f4f6;
+}
+
+.acoes-historico{
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.acoes-historico .botao-historico{
+    margin-top: 0;
+}
+
+.botao-excluir-historico{
+    color: #b91c1c;
+    border-color:#b91c1c;
+    background: #ffffff;
+}
+
+.botao-excluir-historico:hover{
+    background: #fef2f2;
+}
+
+@media (max-width: 600px){
+    .container{
+        padding: 24px 12px;
+    }
+
+    .hero{
+        margin-bottom: 24px;
+    }
+
+    .hero h1{
+        font-size: 32px;
+        line-height: 1.15;
+    }
+
+    .descricao{
+        font-size: 16px;
+    }
+
+    .card{
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .card h2{
+        font-size: 21px;
+    }
+
+    .acoes-historico{
+        flex-wrap: wrap;
+    }
+
+    .botao-historico{
+        flex: 1 1 130px;
+    }
+}

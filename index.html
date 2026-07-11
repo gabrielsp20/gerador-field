@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Ferramenta para gerar, copiar e armazenar textos técnicos de encaminhamento para atendimento Field."
+    />
+    <title>Gerador de Encaminhamento Field</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <p class="tag">Suporte de TI</p>
+
+        <h1>Gerador de Encaminhamento Field</h1>
+
+        <p class="descricao">
+          Ferramenta para gerar textos técnicos de encaminhamento para
+          atendimento presencial.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Dados do chamado</h2>
+
+        <form id="formChamado">
+          <div class="campo">
+            <label for="equipamento">Tipo de equipamento</label>
+            <input
+              type="text"
+              id="equipamento"
+              placeholder="Ex: Impressora, scanner, notebook, desktop"
+            />
+          </div>
+
+          <div class="campo">
+            <label for="problema">Problema constatado</label>
+            <textarea
+              id="problema"
+              rows="4"
+              placeholder="Descreva o problema identificado"
+            ></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="testes">Testes realizados</label>
+            <textarea
+              id="testes"
+              rows="4"
+              placeholder="Informe os testes realizados remotamente"
+            ></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="validacao">Nome do usuário que validou</label>
+            <input
+              type="text"
+              id="validacao"
+              placeholder="Ex: Maria da Silva"
+            />
+          </div>
+
+          <div class="campo">
+            <label for="remoto">Atendimento remoto?</label>
+
+            <select id="remoto">
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="observacao">Observação</label>
+            <textarea
+              id="observacao"
+              rows="3"
+              placeholder="Ex: Não foi possível identificar a causa remotamente"
+            ></textarea>
+          </div>
+
+          <p id="mensagemFormulario" class="mensagem" aria-live="polite"></p>
+
+          <button type="submit">Gerar texto</button>
+
+          <button id="limparFormulario" type="button" class="botao-secundario">
+            Limpar formulário
+          </button>
+
+          <button id="salvarRascunho" type="button" class="botao-secundario">
+            Salvar rascunho
+          </button>
+
+          <button id="apagarRascunho" type="button" class="botao-perigo">
+            Apagar rascunho salvo
+          </button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Texto gerado</h2>
+
+        <textarea
+          id="textoGerado"
+          rows="10"
+          readonly
+          aria-label="Texto gerado"
+          placeholder="O texto gerado aparecerá aqui..."
+        ></textarea>
+
+        <button id="copiarTexto" type="button">Copiar texto</button>
+
+        <button id="salvarHistorico" type="button" class="botao-secundario">
+          Salvar no histórico
+        </button>
+      </section>
+
+      <section class="card">
+        <h2>Histórico de encaminhamentos</h2>
+
+        <p id="historicoVazio" class="historico-vazio">
+          Nenhum encaminhamento salvo.
+        </p>
+
+        <ul id="listaHistorico" class="lista-historico"></ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
