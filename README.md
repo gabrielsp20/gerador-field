@@ -1,69 +1,40 @@
-# Gerador de Encaminhamento Field
+# Assistente de Encerramento de Chamados
 
-Aplicação web criada para auxiliar profissionais de Suporte de TI na elaboração de textos técnicos para encaminhamento de chamados ao atendimento presencial.
-
-O sistema permite preencher os dados do chamado, gerar um texto padronizado, copiar o conteúdo, salvar rascunhos e manter um histórico de encaminhamentos no navegador.
+Aplicação web para profissionais de Suporte de TI gerarem, editarem, copiarem e armazenarem registros técnicos padronizados de encerramento e encaminhamento de chamados.
 
 ## Projeto online
 
-Acesse a aplicação:
-
 https://gabrielsp20.github.io/gerador-field/
+
+O endereço foi mantido para preservar o acesso aos dados existentes no `localStorage` do navegador.
 
 ## Funcionalidades
 
-- Geração automática do texto de encaminhamento
-- Validação dos campos principais
-- Cópia do texto para a área de transferência
-- Limpeza do formulário
-- Salvamento de rascunho
-- Recuperação automática do rascunho
-- Exclusão do rascunho salvo
-- Histórico de encaminhamentos
-- Visualização de registros anteriores
-- Exclusão de registros do histórico
+- Tipos de encerramento para situações recorrentes do Service Desk
+- Modelos prontos que permanecem totalmente editáveis
+- Geração e cópia do texto em uma única ação
+- Edição do texto final antes da cópia
+- Salvamento automático do rascunho
+- Histórico de encerramentos com pesquisa
+- Visualização, cópia, reutilização e exclusão de registros
+- Compatibilidade com rascunhos e históricos criados na versão anterior
+- Armazenamento local, sem envio de informações para servidores externos
 - Layout responsivo para computador e celular
 
-## Tecnologias utilizadas
+## Tecnologias
 
 - HTML5
 - CSS3
 - JavaScript
 - LocalStorage
-- Git
 
-## Como executar o projeto
+## Como executar
 
-1. Baixe ou clone este repositório.
-2. Abra a pasta do projeto.
-3. Abra o arquivo `index.html` no navegador.
+Abra o arquivo `index.html` no navegador ou utilize uma extensão como Live Server no Visual Studio Code.
 
-Também é possível executar o projeto utilizando a extensão Live Server no Visual Studio Code.
+## Armazenamento e compatibilidade
 
-## Como os dados são armazenados
-
-O projeto utiliza o `localStorage` do navegador.
-
-Isso significa que os rascunhos e registros do histórico ficam armazenados apenas no navegador e no dispositivo em que foram criados.
-
-O sistema não utiliza banco de dados ou servidor nesta primeira versão.
-
-## Objetivo do projeto
-
-Este projeto foi desenvolvido como parte do meu processo de retomada e aprofundamento dos estudos em desenvolvimento web.
-
-Durante a construção, foram praticados conceitos como:
-
-- Estruturação de páginas com HTML
-- Estilização responsiva com CSS
-- Manipulação do DOM
-- Eventos em JavaScript
-- Funções
-- Objetos e arrays
-- Validação de formulários
-- Armazenamento com LocalStorage
-- Criação dinâmica de elementos HTML
-- Controle de versão com Git
+Os dados continuam sendo armazenados somente no navegador. As chaves legadas `rascunhoField` e `historicoField` foram mantidas, e o antigo campo `testes` é recuperado como `Solução aplicada`, evitando perda dos dados já salvos.
 
 ## Autor
 

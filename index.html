@@ -5,130 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Ferramenta para gerar, copiar e armazenar textos técnicos de encaminhamento para atendimento Field."
+      content="Assistente para gerar, editar, copiar e armazenar textos técnicos de encerramento de chamados."
     />
-    <title>Gerador de Encaminhamento Field</title>
-
+    <title>Assistente de Encerramento de Chamados</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="container">
       <section class="hero">
         <p class="tag">Suporte de TI</p>
-
-        <h1>Gerador de Encaminhamento Field</h1>
-
+        <h1>Assistente de Encerramento de Chamados</h1>
         <p class="descricao">
-          Ferramenta para gerar textos técnicos de encaminhamento para
-          atendimento presencial.
+          Gere registros técnicos padronizados para conclusão e encaminhamento de atendimentos.
         </p>
       </section>
 
       <section class="card">
-        <h2>Dados do chamado</h2>
+        <div class="titulo-card">
+          <div>
+            <h2>Dados do chamado</h2>
+            <p class="apoio">O rascunho é salvo automaticamente neste navegador.</p>
+          </div>
+          <span id="statusSalvamento" class="status-salvamento" aria-live="polite"></span>
+        </div>
 
         <form id="formChamado">
+          <div class="grade-dois">
+            <div class="campo">
+              <label for="tipoEncerramento">Tipo de encerramento</label>
+              <select id="tipoEncerramento">
+                <option value="personalizado">Personalizado</option>
+                <option value="resolvido-remotamente">Resolvido remotamente</option>
+                <option value="usuario-resolveu">Usuário informou que o problema foi resolvido</option>
+                <option value="encaminhado-field">Encaminhado para Field</option>
+                <option value="encaminhado-outro-time">Encaminhado para outro time</option>
+                <option value="limpeza-disco">Limpeza de disco realizada</option>
+                <option value="sem-contato">Sem contato com o usuário</option>
+                <option value="fora-dominio">Equipamento fora do domínio</option>
+                <option value="impressora-periferico">Impressora ou periférico</option>
+              </select>
+            </div>
+            <div class="campo campo-botao-modelo">
+              <span class="rotulo-falso">Modelo pronto</span>
+              <button id="aplicarModelo" type="button" class="botao-secundario sem-margem">
+                Aplicar modelo selecionado
+              </button>
+            </div>
+          </div>
+
+          <div class="grade-dois">
+            <div class="campo">
+              <label for="chamado">Número do chamado <span>(opcional)</span></label>
+              <input type="text" id="chamado" placeholder="Ex: SR-123456" />
+            </div>
+            <div class="campo">
+              <label for="hostname">Hostname <span>(opcional)</span></label>
+              <input type="text" id="hostname" placeholder="Ex: BRABC123456" />
+            </div>
+          </div>
+
+          <div class="grade-dois">
+            <div class="campo">
+              <label for="chamadoEncaminhamento">Chamado de encaminhamento <span>(opcional)</span></label>
+              <input type="text" id="chamadoEncaminhamento" placeholder="Ex: INC-123456" />
+            </div>
+            <div class="campo">
+              <label for="timeResponsavel">Time responsável <span>(opcional)</span></label>
+              <input type="text" id="timeResponsavel" placeholder="Ex: Field, Redes, M365" />
+            </div>
+          </div>
+
           <div class="campo">
             <label for="equipamento">Tipo de equipamento</label>
-            <input
-              type="text"
-              id="equipamento"
-              placeholder="Ex: Impressora, scanner, notebook, desktop"
-            />
+            <input type="text" id="equipamento" placeholder="Ex: Notebook, desktop, impressora" />
           </div>
 
           <div class="campo">
             <label for="problema">Problema constatado</label>
-            <textarea
-              id="problema"
-              rows="4"
-              placeholder="Descreva o problema identificado"
-            ></textarea>
+            <textarea id="problema" rows="4" placeholder="Descreva o problema identificado"></textarea>
           </div>
 
           <div class="campo">
-            <label for="testes">Testes realizados</label>
-            <textarea
-              id="testes"
-              rows="4"
-              placeholder="Informe os testes realizados remotamente"
-            ></textarea>
+            <label for="solucao">Solução aplicada</label>
+            <textarea id="solucao" rows="5" placeholder="Descreva a análise, a solução ou o encaminhamento realizado"></textarea>
           </div>
 
-          <div class="campo">
-            <label for="validacao">Nome do usuário que validou</label>
-            <input
-              type="text"
-              id="validacao"
-              placeholder="Ex: Maria da Silva"
-            />
-          </div>
-
-          <div class="campo">
-            <label for="remoto">Atendimento remoto?</label>
-
-            <select id="remoto">
-              <option value="Sim">Sim</option>
-              <option value="Não">Não</option>
-            </select>
+          <div class="grade-dois">
+            <div class="campo">
+              <label for="validacao">Nome do usuário que validou</label>
+              <input type="text" id="validacao" placeholder="Ex: Maria da Silva" />
+            </div>
+            <div class="campo">
+              <label for="remoto">Atendimento remoto?</label>
+              <select id="remoto">
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
           </div>
 
           <div class="campo">
             <label for="observacao">Observação</label>
-            <textarea
-              id="observacao"
-              rows="3"
-              placeholder="Ex: Não foi possível identificar a causa remotamente"
-            ></textarea>
+            <textarea id="observacao" rows="3" placeholder="Inclua somente informações adicionais relevantes"></textarea>
           </div>
 
           <p id="mensagemFormulario" class="mensagem" aria-live="polite"></p>
 
-          <button type="submit">Gerar texto</button>
-
-          <button id="limparFormulario" type="button" class="botao-secundario">
-            Limpar formulário
-          </button>
-
-          <button id="salvarRascunho" type="button" class="botao-secundario">
-            Salvar rascunho
-          </button>
-
-          <button id="apagarRascunho" type="button" class="botao-perigo">
-            Apagar rascunho salvo
-          </button>
+          <div class="acoes-principais">
+            <button type="submit">Gerar texto</button>
+            <button id="gerarCopiar" type="button">Gerar e copiar</button>
+          </div>
+          <div class="acoes-secundarias">
+            <button id="limparFormulario" type="button" class="botao-secundario">Limpar formulário</button>
+            <button id="apagarRascunho" type="button" class="botao-perigo">Apagar rascunho salvo</button>
+          </div>
         </form>
       </section>
 
       <section class="card">
         <h2>Texto gerado</h2>
-
+        <p class="apoio">Você pode editar o texto antes de copiar ou salvar.</p>
         <textarea
           id="textoGerado"
-          rows="10"
-          readonly
-          aria-label="Texto gerado"
+          rows="14"
+          aria-label="Texto gerado editável"
           placeholder="O texto gerado aparecerá aqui..."
         ></textarea>
-
-        <button id="copiarTexto" type="button">Copiar texto</button>
-
-        <button id="salvarHistorico" type="button" class="botao-secundario">
-          Salvar no histórico
-        </button>
+        <div class="acoes-principais">
+          <button id="copiarTexto" type="button">Copiar texto</button>
+          <button id="salvarHistorico" type="button" class="botao-secundario sem-margem">Salvar no histórico</button>
+        </div>
       </section>
 
       <section class="card">
-        <h2>Histórico de encaminhamentos</h2>
-
-        <p id="historicoVazio" class="historico-vazio">
-          Nenhum encaminhamento salvo.
-        </p>
-
+        <div class="titulo-card">
+          <div>
+            <h2>Histórico de encerramentos</h2>
+            <p id="contadorHistorico" class="apoio"></p>
+          </div>
+        </div>
+        <div class="campo pesquisa-historico">
+          <label for="pesquisaHistorico">Pesquisar no histórico</label>
+          <input id="pesquisaHistorico" type="search" placeholder="Chamado, hostname, usuário, equipamento ou texto" />
+        </div>
+        <p id="historicoVazio" class="historico-vazio">Nenhum encerramento salvo.</p>
         <ul id="listaHistorico" class="lista-historico"></ul>
       </section>
     </main>
-
     <script src="script.js"></script>
   </body>
 </html>
