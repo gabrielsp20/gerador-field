@@ -40,6 +40,7 @@ body {
 .campo { margin-bottom: 18px; }
 .campo label, .rotulo-falso { display: block; font-weight: bold; margin-bottom: 8px; color: var(--texto); }
 .campo label span { color: var(--texto-suave); font-size: 13px; font-weight: normal; }
+.dica-campo { margin-top: 7px; color: var(--texto-suave); font-size: 13px; line-height: 1.4; }
 .campo-botao-modelo { display: flex; flex-direction: column; }
 .campo-botao-modelo button { flex: 1; }
 .campo textarea { resize: vertical; }

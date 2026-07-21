@@ -8,7 +8,7 @@
       content="Assistente para gerar, editar, copiar e armazenar textos técnicos de encerramento de chamados."
     />
     <title>Assistente de Encerramento de Chamados</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=20260721-1" />
   </head>
   <body>
     <main class="container">
@@ -44,6 +44,7 @@
                 <option value="fora-dominio">Equipamento fora do domínio</option>
                 <option value="impressora-periferico">Impressora ou periférico</option>
               </select>
+              <p class="dica-campo">Selecione um tipo e aplique o modelo para preencher uma base editável.</p>
             </div>
             <div class="campo campo-botao-modelo">
               <span class="rotulo-falso">Modelo pronto</span>
@@ -66,7 +67,9 @@
 
           <div class="grade-dois">
             <div class="campo">
-              <label for="chamadoEncaminhamento">Chamado de encaminhamento <span>(opcional)</span></label>
+              <label for="chamadoEncaminhamento">
+                Chamado de encaminhamento <span id="regraChamadoEncaminhamento">(opcional)</span>
+              </label>
               <input type="text" id="chamadoEncaminhamento" placeholder="Ex: INC-123456" />
             </div>
             <div class="campo">
@@ -76,24 +79,24 @@
           </div>
 
           <div class="campo">
-            <label for="equipamento">Tipo de equipamento</label>
-            <input type="text" id="equipamento" placeholder="Ex: Notebook, desktop, impressora" />
+            <label for="equipamento">Tipo de equipamento <span>(obrigatório)</span></label>
+            <input type="text" id="equipamento" aria-required="true" placeholder="Ex: Notebook, desktop, impressora" />
           </div>
 
           <div class="campo">
-            <label for="problema">Problema constatado</label>
-            <textarea id="problema" rows="4" placeholder="Descreva o problema identificado"></textarea>
+            <label for="problema">Problema constatado <span>(obrigatório)</span></label>
+            <textarea id="problema" rows="4" aria-required="true" placeholder="Descreva o problema identificado"></textarea>
           </div>
 
           <div class="campo">
-            <label for="solucao">Solução aplicada</label>
-            <textarea id="solucao" rows="5" placeholder="Descreva a análise, a solução ou o encaminhamento realizado"></textarea>
+            <label for="solucao">Solução aplicada <span>(obrigatório)</span></label>
+            <textarea id="solucao" rows="5" aria-required="true" placeholder="Descreva a análise, a solução ou o encaminhamento realizado"></textarea>
           </div>
 
           <div class="grade-dois">
             <div class="campo">
-              <label for="validacao">Nome do usuário que validou</label>
-              <input type="text" id="validacao" placeholder="Ex: Maria da Silva" />
+              <label for="validacao">Nome do usuário que validou <span>(obrigatório)</span></label>
+              <input type="text" id="validacao" aria-required="true" placeholder="Ex: Maria da Silva" />
             </div>
             <div class="campo">
               <label for="remoto">Atendimento remoto?</label>
@@ -152,6 +155,6 @@
         <ul id="listaHistorico" class="lista-historico"></ul>
       </section>
     </main>
-    <script src="script.js"></script>
+    <script src="script.js?v=20260721-1"></script>
   </body>
 </html>

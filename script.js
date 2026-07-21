@@ -9,6 +9,7 @@ const listaHistorico = document.getElementById("listaHistorico");
 const historicoVazio = document.getElementById("historicoVazio");
 const contadorHistorico = document.getElementById("contadorHistorico");
 const pesquisaHistorico = document.getElementById("pesquisaHistorico");
+const regraChamadoEncaminhamento = document.getElementById("regraChamadoEncaminhamento");
 
 const campos = {
   tipoEncerramento: document.getElementById("tipoEncerramento"),
@@ -35,6 +36,12 @@ const nomesTipos = {
   "fora-dominio": "Equipamento fora do domínio",
   "impressora-periferico": "Impressora ou periférico",
 };
+
+const tiposComEncaminhamentoObrigatorio = new Set([
+  "encaminhado-field",
+  "encaminhado-outro-time",
+  "fora-dominio",
+]);
 
 const modelos = {
   "resolvido-remotamente": {
@@ -84,6 +91,26 @@ function lerJsonSeguro(chave, valorPadrao) {
   }
 }
 
+function salvarJsonSeguro(chave, valor) {
+  try {
+    localStorage.setItem(chave, JSON.stringify(valor));
+    return true;
+  } catch (erro) {
+    console.error(`Não foi possível salvar ${chave}:`, erro);
+    return false;
+  }
+}
+
+function removerItemSeguro(chave) {
+  try {
+    localStorage.removeItem(chave);
+    return true;
+  } catch (erro) {
+    console.error(`Não foi possível remover ${chave}:`, erro);
+    return false;
+  }
+}
+
 let historico = lerJsonSeguro(CHAVE_HISTORICO, []);
 if (!Array.isArray(historico)) historico = [];
 
@@ -116,26 +143,39 @@ function preencherFormulario(dados = {}) {
   campos.remoto.value = dados.remoto || "Sim";
   campos.observacao.value = dados.observacao || "";
   textoGerado.value = dados.textoGerado || "";
+  atualizarRegrasFormulario();
+}
+
+function atualizarRegrasFormulario() {
+  const exigeEncaminhamento = tiposComEncaminhamentoObrigatorio.has(campos.tipoEncerramento.value);
+  campos.chamadoEncaminhamento.setAttribute("aria-required", String(exigeEncaminhamento));
+  regraChamadoEncaminhamento.textContent = exigeEncaminhamento
+    ? "(obrigatório para este tipo)"
+    : "(opcional)";
 }
 
 let temporizadorSalvamento;
-function salvarRascunhoAutomaticamente() {
+function cancelarSalvamentoPendente() {
   clearTimeout(temporizadorSalvamento);
+  temporizadorSalvamento = undefined;
+}
+
+function salvarRascunhoAutomaticamente() {
+  cancelarSalvamentoPendente();
   statusSalvamento.textContent = "Salvando...";
   temporizadorSalvamento = setTimeout(() => {
-    try {
-      localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify(obterDadosFormulario()));
+    temporizadorSalvamento = undefined;
+    if (salvarJsonSeguro(CHAVE_RASCUNHO, obterDadosFormulario())) {
       statusSalvamento.textContent = "Rascunho salvo automaticamente";
-    } catch (erro) {
+    } else {
       statusSalvamento.textContent = "Falha ao salvar rascunho";
-      console.error("Erro ao salvar rascunho:", erro);
     }
   }, 400);
 }
 
 function substituirMarcadores(texto) {
   const chamadoEncaminhamento = campos.chamadoEncaminhamento.value.trim();
-  return texto.replace(
+  return texto.replaceAll(
     "[INFORMAR CHAMADO DE ENCAMINHAMENTO]",
     chamadoEncaminhamento || "[INFORMAR CHAMADO DE ENCAMINHAMENTO]",
   );
@@ -163,8 +203,18 @@ function aplicarModelo() {
 
 function validarFormulario() {
   const obrigatorios = [campos.equipamento, campos.problema, campos.solucao, campos.validacao];
-  if (obrigatorios.some((campo) => campo.value.trim() === "")) {
+  const primeiroCampoVazio = obrigatorios.find((campo) => campo.value.trim() === "");
+  if (primeiroCampoVazio) {
     mostrarMensagem("Preencha Tipo de equipamento, Problema constatado, Solução aplicada e Usuário que validou.", "erro");
+    primeiroCampoVazio.focus();
+    return false;
+  }
+  if (
+    tiposComEncaminhamentoObrigatorio.has(campos.tipoEncerramento.value) &&
+    campos.chamadoEncaminhamento.value.trim() === ""
+  ) {
+    mostrarMensagem("Informe o chamado de encaminhamento antes de gerar o texto.", "erro");
+    campos.chamadoEncaminhamento.focus();
     return false;
   }
   return true;
@@ -173,6 +223,7 @@ function validarFormulario() {
 function gerarTexto() {
   if (!validarFormulario()) return "";
   const dados = obterDadosFormulario();
+  dados.solucao = substituirMarcadores(dados.solucao);
   const linhasOpcionais = [];
   if (dados.chamado) linhasOpcionais.push(`NÚMERO DO CHAMADO:\n${dados.chamado}`);
   if (dados.hostname) linhasOpcionais.push(`HOSTNAME:\n${dados.hostname}`);
@@ -205,11 +256,19 @@ ${dados.observacao || "Sem observações adicionais."}`;
 
 async function copiarParaAreaTransferencia(texto) {
   try {
+    if (!navigator.clipboard?.writeText) throw new Error("Clipboard API indisponível");
     await navigator.clipboard.writeText(texto);
   } catch (erro) {
-    textoGerado.focus();
-    textoGerado.select();
-    if (!document.execCommand("copy")) throw erro;
+    const campoTemporario = document.createElement("textarea");
+    campoTemporario.value = texto;
+    campoTemporario.setAttribute("readonly", "");
+    campoTemporario.style.position = "fixed";
+    campoTemporario.style.opacity = "0";
+    document.body.appendChild(campoTemporario);
+    campoTemporario.select();
+    const copiou = document.execCommand("copy");
+    campoTemporario.remove();
+    if (!copiou) throw erro;
   }
 }
 
@@ -304,8 +363,12 @@ function renderizarHistorico() {
       }),
       criarBotaoHistorico("Excluir", () => {
         if (!confirm("Deseja excluir este encerramento do histórico?")) return;
-        historico = historico.filter((itemHistorico) => itemHistorico.id !== registro.id);
-        localStorage.setItem(CHAVE_HISTORICO, JSON.stringify(historico));
+        const historicoAtualizado = historico.filter((itemHistorico) => itemHistorico.id !== registro.id);
+        if (!salvarJsonSeguro(CHAVE_HISTORICO, historicoAtualizado)) {
+          mostrarMensagem("Não foi possível excluir o encerramento do histórico.", "erro");
+          return;
+        }
+        historico = historicoAtualizado;
         renderizarHistorico();
         mostrarMensagem("Encerramento excluído do histórico.", "sucesso");
       }, "botao-excluir-historico"),
@@ -324,6 +387,7 @@ formChamado.addEventListener("submit", (event) => {
 formChamado.addEventListener("input", salvarRascunhoAutomaticamente);
 formChamado.addEventListener("change", salvarRascunhoAutomaticamente);
 textoGerado.addEventListener("input", salvarRascunhoAutomaticamente);
+campos.tipoEncerramento.addEventListener("change", atualizarRegrasFormulario);
 document.getElementById("aplicarModelo").addEventListener("click", aplicarModelo);
 document.getElementById("copiarTexto").addEventListener("click", copiarTextoAtual);
 document.getElementById("gerarCopiar").addEventListener("click", async () => {
@@ -332,20 +396,31 @@ document.getElementById("gerarCopiar").addEventListener("click", async () => {
 
 document.getElementById("limparFormulario").addEventListener("click", () => {
   if (!confirm("Deseja limpar o formulário e o texto gerado? O histórico não será alterado.")) return;
+  cancelarSalvamentoPendente();
   formChamado.reset();
   textoGerado.value = "";
-  localStorage.removeItem(CHAVE_RASCUNHO);
+  if (!removerItemSeguro(CHAVE_RASCUNHO)) {
+    statusSalvamento.textContent = "Falha ao remover rascunho";
+    mostrarMensagem("O formulário foi limpo, mas não foi possível remover o rascunho salvo.", "erro");
+    return;
+  }
   statusSalvamento.textContent = "";
   mostrarMensagem("Formulário limpo. O histórico foi preservado.", "sucesso");
 });
 
 document.getElementById("apagarRascunho").addEventListener("click", () => {
-  if (localStorage.getItem(CHAVE_RASCUNHO) === null) {
+  const rascunhoExistente = lerJsonSeguro(CHAVE_RASCUNHO, null);
+  if (rascunhoExistente === null) {
     mostrarMensagem("Não existe nenhum rascunho salvo.", "erro");
     return;
   }
   if (!confirm("Deseja apagar o rascunho salvo? O histórico não será alterado.")) return;
-  localStorage.removeItem(CHAVE_RASCUNHO);
+  cancelarSalvamentoPendente();
+  if (!removerItemSeguro(CHAVE_RASCUNHO)) {
+    statusSalvamento.textContent = "Falha ao remover rascunho";
+    mostrarMensagem("Não foi possível apagar o rascunho salvo.", "erro");
+    return;
+  }
   formChamado.reset();
   textoGerado.value = "";
   statusSalvamento.textContent = "";
@@ -361,12 +436,16 @@ document.getElementById("salvarHistorico").addEventListener("click", () => {
   const dados = obterDadosFormulario();
   const registro = {
     ...dados,
-    id: Date.now(),
+    id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     data: new Date().toLocaleString("pt-BR"),
     texto,
   };
-  historico.unshift(registro);
-  localStorage.setItem(CHAVE_HISTORICO, JSON.stringify(historico));
+  const historicoAtualizado = [registro, ...historico];
+  if (!salvarJsonSeguro(CHAVE_HISTORICO, historicoAtualizado)) {
+    mostrarMensagem("Não foi possível salvar no histórico. Verifique o armazenamento do navegador.", "erro");
+    return;
+  }
+  historico = historicoAtualizado;
   renderizarHistorico();
   mostrarMensagem("Encerramento salvo no histórico.", "sucesso");
 });
@@ -378,4 +457,5 @@ if (rascunhoSalvo) {
   preencherFormulario(rascunhoSalvo);
   mostrarMensagem("Rascunho recuperado do navegador.", "sucesso");
 }
+atualizarRegrasFormulario();
 renderizarHistorico();
